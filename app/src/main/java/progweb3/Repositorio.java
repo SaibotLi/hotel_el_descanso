@@ -108,17 +108,17 @@ public class Repositorio {
         return lista;
     }
 
-    // Obtiene todos los tipos distintos que existen en la base
+    // Obtiene todos los tipos disponibles desde la tabla tipo_habitacion
     public List<String> obtenerTiposDisponibles() throws Exception {
         List<String> tipos = new ArrayList<>();
-        String sql = "SELECT DISTINCT tipo FROM habitacion ORDER BY tipo";
+        String sql = "SELECT nombre FROM tipo_habitacion ORDER BY nombre";
         
         try (Connection conn = dataSource.getConnection();
              Statement st = conn.createStatement();
              ResultSet rs = st.executeQuery(sql)) {
              
             while (rs.next()) {
-                tipos.add(rs.getString(1));
+                tipos.add(rs.getString("nombre"));
             }
         }
         return tipos;

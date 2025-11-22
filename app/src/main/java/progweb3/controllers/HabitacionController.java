@@ -47,12 +47,18 @@ public class HabitacionController {
     }
 
     // MOSTRAR FORMULARIO NUEVA HABITACION
-@GET
-@Path("/nueva")
-public String nueva() {
-    models.put("habitacion", new Habitacion());  // objeto vacío para Payara no se rompa
-    return "habitacion-form.jsp";
-}
+    @GET
+    @Path("/nueva")
+    public String nueva() {
+        try {
+            models.put("habitacion", new Habitacion());
+            models.put("tiposDisponibles", repo.obtenerTiposDisponibles());
+        } catch (Exception e) {
+            models.put("error", "Error al cargar tipos de habitación");
+            e.printStackTrace();
+        }
+        return "habitacion-form.jsp";
+    }
 
     // GUARDAR HABITACION (NUEVA O EDITADA)
     @POST
@@ -81,6 +87,13 @@ public String nueva() {
         } catch (Exception e) {
             e.printStackTrace();
             models.put("error", "Error al guardar habitación: " + e.getMessage());
+            try {
+                // Recargar tipos en caso de error para que el formulario funcione
+                models.put("habitacion", new Habitacion());
+                models.put("tiposDisponibles", repo.obtenerTiposDisponibles());
+            } catch (Exception ex) {
+                e.printStackTrace();
+            }
             return "habitacion-form.jsp";
         }
 
@@ -94,8 +107,10 @@ public String nueva() {
         try {
             Habitacion h = repo.buscarHabitacion(id);
             models.put("habitacion", h);
+            models.put("tiposDisponibles", repo.obtenerTiposDisponibles());
         } catch (Exception e) {
             models.put("error", "No se pudo cargar la habitación");
+            e.printStackTrace();
         }
         return "habitacion-form.jsp";
     }

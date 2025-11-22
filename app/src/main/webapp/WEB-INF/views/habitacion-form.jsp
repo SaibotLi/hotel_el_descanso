@@ -35,7 +35,14 @@
     <br><br>
 
     Tipo:<br>
-    <input type="text" name="tipo" value="${habitacion.tipo}">
+    <select name="tipo">
+        <option value="">-- Seleccione un tipo --</option>
+        <c:forEach var="tipo" items="${tiposDisponibles}">
+            <option value="${tipo}" 
+                <c:if test="${habitacion.tipo == tipo}">selected</c:if>
+            >${tipo}</option>
+        </c:forEach>
+    </select>
     <br><br>
 
     Precio por noche:<br>
