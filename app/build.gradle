@@ -1,0 +1,38 @@
+plugins {
+    id 'java'
+    id 'war'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Jakarta EE API (Servlets, JSP, etc.)
+    providedCompile 'jakarta.platform:jakarta.jakartaee-web-api:10.0.0'
+
+    // Jakarta MVC API
+    implementation 'jakarta.mvc:jakarta.mvc-api:2.1.0'
+
+    // IMPLEMENTACIÓN DE MVC (Ozark / Krazo para Jakarta EE 10)
+    implementation 'org.eclipse.krazo:krazo-jersey:3.0.1'
+
+    // PostgreSQL JDBC driver
+    implementation 'org.postgresql:postgresql:42.7.3'
+
+    // JUnit para tests 
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+war {
+    archiveBaseName = 'hotel_el_descanso'
+    archiveVersion = ''
+}
