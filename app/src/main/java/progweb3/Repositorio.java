@@ -85,6 +85,45 @@ public class Repositorio {
         return lista;
     }
 
+// Filtrar habitaciones por tipo (case-insensitive)
+    public List<Habitacion> listarPorTipo(String tipo) throws Exception {
+        List<Habitacion> lista = new ArrayList<>();
+        String sql = "SELECT * FROM habitacion WHERE tipo ILIKE ? ORDER BY numero";
+        
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+             
+            ps.setString(1, tipo);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Habitacion h = new Habitacion();
+                    h.setId(rs.getInt("id"));
+                    h.setNumero(rs.getInt("numero"));
+                    h.setTipo(rs.getString("tipo"));
+                    h.setPrecioPorNoche(rs.getBigDecimal("precio_por_noche"));
+                    lista.add(h);
+                }
+            }
+        }
+        return lista;
+    }
+
+    // Obtiene todos los tipos distintos que existen en la base
+    public List<String> obtenerTiposDisponibles() throws Exception {
+        List<String> tipos = new ArrayList<>();
+        String sql = "SELECT DISTINCT tipo FROM habitacion ORDER BY tipo";
+        
+        try (Connection conn = dataSource.getConnection();
+             Statement st = conn.createStatement();
+             ResultSet rs = st.executeQuery(sql)) {
+             
+            while (rs.next()) {
+                tipos.add(rs.getString(1));
+            }
+        }
+        return tipos;
+    }
+
     /**
      * Busca una habitación por ID.
      */

@@ -17,7 +17,25 @@ prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
     <c:if test="${not empty error}">
       <div style="color: red">${error}</div>
     </c:if>
-
+    <br>
+    <form method="get" action="${pageContext.request.contextPath}/pw3/habitaciones/">
+        <strong>Filtrar por tipo:</strong>
+        <select name="tipo">
+            <option value="">-- Todos los tipos --</option>
+            <c:forEach var="t" items="${tiposDisponibles}">
+                <option value="${t}" 
+                    <c:if test="${t == tipoSeleccionado}">selected</c:if> >
+                    ${t}
+                </option>
+            </c:forEach>
+        </select>
+        <button type="submit">Filtrar</button>
+        
+        <c:if test="${not empty tipoSeleccionado}">
+            <a href="${pageContext.request.contextPath}/pw3/habitaciones/">[Quitar filtro]</a>
+        </c:if>
+    </form>
+    <br>
     <table border="1" cellpadding="10">
       <tr>
         <th>ID</th>

@@ -10,6 +10,7 @@ import progweb3.Repositorio;
 import progweb3.models.Habitacion;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Controller
 @Path("/habitaciones")
@@ -24,11 +25,23 @@ public class HabitacionController {
     // LISTAR HABITACIONES
     @GET
     @Path("/")
-    public String listar() {
+    public String listar(@QueryParam("tipo") String tipoFiltro) {
         try {
-            models.put("habitaciones", repo.listarHabitaciones());
+            List<Habitacion> habitaciones;
+            
+            if (tipoFiltro != null && !tipoFiltro.trim().isEmpty()) {
+                habitaciones = repo.listarPorTipo("%" + tipoFiltro.trim() + "%"); // opcional: con % para búsqueda parcial
+                models.put("tipoSeleccionado", tipoFiltro.trim());
+            } else {
+                habitaciones = repo.listarHabitaciones();
+            }
+            
+            models.put("habitaciones", habitaciones);
+            models.put("tiposDisponibles", repo.obtenerTiposDisponibles());
+            
         } catch (Exception e) {
-            models.put("error", "Error listando habitaciones: " + e.getMessage());
+            models.put("error", "Error al cargar las habitaciones");
+            e.printStackTrace();
         }
         return "habitacion-list.jsp";
     }
@@ -98,4 +111,5 @@ public String nueva() {
         }
         return "redirect:/habitaciones/";
     }
+
 }
