@@ -420,11 +420,11 @@ public class Repositorio {
     }
 
     /**
-     * Lista todas las reservas con información de habitación y huésped (JOINs).
-     * Retorna una lista de objetos Reserva con datos básicos.
+     * Lista todas las reservas con información completa de habitación y huésped.
+     * Retorna lista de ReservaInfoCompleta.
      */
-    public List<Reserva> listarReservas() throws Exception {
-        List<Reserva> lista = new ArrayList<>();
+    public List<ReservaInfoCompleta> listarReservas() throws Exception {
+        List<ReservaInfoCompleta> lista = new ArrayList<>();
         String sql = "SELECT r.*, h.numero as habitacion_numero, h.tipo as habitacion_tipo, " +
                      "hu.nombre as huesped_nombre, hu.documento as huesped_documento " +
                      "FROM reserva r " +
@@ -437,24 +437,28 @@ public class Repositorio {
              ResultSet rs = st.executeQuery(sql)) {
             
             while (rs.next()) {
-                Reserva r = new Reserva();
-                r.setId(rs.getInt("id"));
-                r.setHabitacionId(rs.getInt("habitacion_id"));
-                r.setHuespedId(rs.getInt("huesped_id"));
-                r.setFechaIngreso(rs.getDate("fecha_ingreso").toLocalDate());
-                r.setFechaSalida(rs.getDate("fecha_salida").toLocalDate());
-                r.setPrecioTotal(rs.getBigDecimal("precio_total"));
-                lista.add(r);
+                ReservaInfoCompleta info = new ReservaInfoCompleta();
+                info.setId(rs.getInt("id"));
+                info.setHabitacionId(rs.getInt("habitacion_id"));
+                info.setHabitacionNumero(rs.getInt("habitacion_numero"));
+                info.setHabitacionTipo(rs.getString("habitacion_tipo"));
+                info.setHuespedId(rs.getInt("huesped_id"));
+                info.setHuespedNombre(rs.getString("huesped_nombre"));
+                info.setHuespedDocumento(rs.getString("huesped_documento"));
+                info.setFechaIngreso(rs.getDate("fecha_ingreso").toLocalDate());
+                info.setFechaSalida(rs.getDate("fecha_salida").toLocalDate());
+                info.setPrecioTotal(rs.getBigDecimal("precio_total"));
+                lista.add(info);
             }
         }
         return lista;
     }
 
     /**
-     * Lista reservas con filtros opcionales por rango de fechas y tipo de habitación.
+     * Lista reservas con filtros, retornando información completa.
      */
-    public List<Reserva> listarReservasConFiltros(LocalDate fechaDesde, LocalDate fechaHasta, String tipoHabitacion) throws Exception {
-        List<Reserva> lista = new ArrayList<>();
+    public List<ReservaInfoCompleta> listarReservasConFiltros(LocalDate fechaDesde, LocalDate fechaHasta, String tipoHabitacion) throws Exception {
+        List<ReservaInfoCompleta> lista = new ArrayList<>();
         StringBuilder sql = new StringBuilder(
             "SELECT r.*, h.numero as habitacion_numero, h.tipo as habitacion_tipo, " +
             "hu.nombre as huesped_nombre, hu.documento as huesped_documento " +
@@ -493,14 +497,18 @@ public class Repositorio {
             
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    Reserva r = new Reserva();
-                    r.setId(rs.getInt("id"));
-                    r.setHabitacionId(rs.getInt("habitacion_id"));
-                    r.setHuespedId(rs.getInt("huesped_id"));
-                    r.setFechaIngreso(rs.getDate("fecha_ingreso").toLocalDate());
-                    r.setFechaSalida(rs.getDate("fecha_salida").toLocalDate());
-                    r.setPrecioTotal(rs.getBigDecimal("precio_total"));
-                    lista.add(r);
+                    ReservaInfoCompleta info = new ReservaInfoCompleta();
+                    info.setId(rs.getInt("id"));
+                    info.setHabitacionId(rs.getInt("habitacion_id"));
+                    info.setHabitacionNumero(rs.getInt("habitacion_numero"));
+                    info.setHabitacionTipo(rs.getString("habitacion_tipo"));
+                    info.setHuespedId(rs.getInt("huesped_id"));
+                    info.setHuespedNombre(rs.getString("huesped_nombre"));
+                    info.setHuespedDocumento(rs.getString("huesped_documento"));
+                    info.setFechaIngreso(rs.getDate("fecha_ingreso").toLocalDate());
+                    info.setFechaSalida(rs.getDate("fecha_salida").toLocalDate());
+                    info.setPrecioTotal(rs.getBigDecimal("precio_total"));
+                    lista.add(info);
                 }
             }
         }
@@ -619,6 +627,40 @@ public class Repositorio {
         public void setFechaSalida(LocalDate fechaSalida) { this.fechaSalida = fechaSalida; }
         public BigDecimal getPrecioTotal() { return precioTotal; }
         public void setPrecioTotal(BigDecimal precioTotal) { this.precioTotal = precioTotal; }
+    }
+
+    /**
+     * Lista huéspedes que tienen reservas activas (fecha actual entre ingreso y salida).
+     * Estos son los "huéspedes actuales" del hotel.
+     */
+    public List<Huesped> listarHuespedesActuales() throws Exception {
+        List<Huesped> lista = new ArrayList<>();
+        LocalDate hoy = LocalDate.now();
+        
+        String sql = "SELECT DISTINCT hu.* " +
+                     "FROM huesped hu " +
+                     "JOIN reserva r ON hu.id = r.huesped_id " +
+                     "WHERE ? >= r.fecha_ingreso AND ? <= r.fecha_salida " +
+                     "ORDER BY hu.nombre";
+        
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            
+            ps.setDate(1, Date.valueOf(hoy));
+            ps.setDate(2, Date.valueOf(hoy));
+            
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Huesped h = new Huesped();
+                    h.setId(rs.getInt("id"));
+                    h.setNombre(rs.getString("nombre"));
+                    h.setTelefono(rs.getString("telefono"));
+                    h.setDocumento(rs.getString("documento"));
+                    lista.add(h);
+                }
+            }
+        }
+        return lista;
     }
     // ============================================================
     // AQUI LUEGO IRÁN:

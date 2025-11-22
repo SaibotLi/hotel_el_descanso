@@ -10,6 +10,12 @@ import progweb3.Repositorio;
 import progweb3.models.Huesped;
 
 import java.util.List;
+import java.time.LocalDate;
+import java.sql.Date;
+import java.util.ArrayList;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 @Controller
 @Path("/huespedes")
@@ -30,6 +36,21 @@ public class HuespedController {
             models.put("huespedes", huespedes);
         } catch (Exception e) {
             models.put("error", "Error al cargar los huéspedes");
+            e.printStackTrace();
+        }
+        return "huesped-list.jsp";
+    }
+
+    // LISTAR HUÉSPEDES ACTUALES
+    @GET
+    @Path("/actuales")
+    public String listarActuales() {
+        try {
+            List<Huesped> huespedes = repo.listarHuespedesActuales();
+            models.put("huespedes", huespedes);
+            models.put("titulo", "Huéspedes Actuales");
+        } catch (Exception e) {
+            models.put("error", "Error al cargar los huéspedes actuales");
             e.printStackTrace();
         }
         return "huesped-list.jsp";

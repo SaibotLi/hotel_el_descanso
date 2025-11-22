@@ -32,7 +32,7 @@ public class ReservaController {
             @QueryParam("tipo") String tipoHabitacion
     ) {
         try {
-            List<Reserva> reservas;
+            List<Repositorio.ReservaInfoCompleta> reservas;
             LocalDate fechaDesde = null;
             LocalDate fechaHasta = null;
 
@@ -52,8 +52,6 @@ public class ReservaController {
             }
 
             models.put("reservas", reservas);
-            models.put("habitaciones", repo.listarHabitaciones());
-            models.put("huespedes", repo.listarHuespedes());
             models.put("tiposDisponibles", repo.obtenerTiposDisponibles());
             
             // Mantener filtros seleccionados para el formulario

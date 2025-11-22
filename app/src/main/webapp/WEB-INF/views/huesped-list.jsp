@@ -15,7 +15,7 @@ prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
     <br /><br />
 
     <c:if test="${not empty error}">
-      <div style="color: red">${error}</div>
+      <div style="color: red"><c:out value="${error}" /></div>
     </c:if>
     <br />
 
@@ -30,10 +30,10 @@ prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
       <c:forEach var="h" items="${huespedes}">
         <tr>
-          <td>${h.id}</td>
-          <td>${h.nombre}</td>
-          <td>${h.telefono}</td>
-          <td>${h.documento}</td>
+          <td><c:out value="${h.id}" /></td>
+          <td><c:out value="${h.nombre}" /></td>
+          <td><c:out value="${h.telefono}" /></td>
+          <td><c:out value="${h.documento}" /></td>
           <td>
             <a
               href="${pageContext.request.contextPath}/pw3/huespedes/editar/${h.id}"

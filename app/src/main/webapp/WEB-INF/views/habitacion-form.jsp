@@ -20,33 +20,33 @@
 </h1>
 
 <c:if test="${not empty error}">
-    <div style="color:red">${error}</div>
+    <div style="color:red"><c:out value="${error}"/></div>
 </c:if>
 
 <form method="post" action="${pageContext.request.contextPath}/pw3/habitaciones/guardar">
     
-    <!-- Campo oculto para saber si es edición -->
     <c:if test="${habitacion != null}">
-        <input type="hidden" name="id" value="${habitacion.id}">
+        <input type="hidden" name="id" value="<c:out value="${habitacion.id}"/>">
     </c:if>
 
     Número:<br>
-    <input type="number" name="numero" value="${habitacion.numero}">
+    <input type="number" name="numero" value="<c:out value="${habitacion.numero}"/>">
     <br><br>
 
     Tipo:<br>
     <select name="tipo">
         <option value="">-- Seleccione un tipo --</option>
         <c:forEach var="tipo" items="${tiposDisponibles}">
-            <option value="${tipo}" 
-                <c:if test="${habitacion.tipo == tipo}">selected</c:if>
-            >${tipo}</option>
+            <option value="<c:out value="${tipo}"/>" 
+                <c:if test="${habitacion.tipo == tipo}">selected</c:if> >
+                <c:out value="${tipo}"/>
+            </option>
         </c:forEach>
     </select>
     <br><br>
 
     Precio por noche:<br>
-    <input type="number" name="precio" value="${habitacion.precioPorNoche}" min="0" required>
+    <input type="number" name="precio" value="<c:out value="${habitacion.precioPorNoche}"/>" min="0" required>
     <br><br>
 
     <button type="submit">Guardar</button>

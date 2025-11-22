@@ -13,7 +13,7 @@
     <br><br>
 
     <c:if test="${not empty error}">
-        <div style="color:red">${error}</div>
+        <div style="color:red"><c:out value="${error}"/></div>
     </c:if>
     <br>
 
@@ -22,18 +22,18 @@
         <strong>Filtros:</strong><br>
         
         Fecha desde:
-        <input type="date" name="fechaDesde" value="${fechaDesdeSeleccionada}">
+        <input type="date" name="fechaDesde" value="<c:out value="${fechaDesdeSeleccionada}"/>">
         
         Fecha hasta:
-        <input type="date" name="fechaHasta" value="${fechaHastaSeleccionada}">
+        <input type="date" name="fechaHasta" value="<c:out value="${fechaHastaSeleccionada}"/>">
         
         Tipo de habitación:
         <select name="tipo">
             <option value="">-- Todos los tipos --</option>
             <c:forEach var="t" items="${tiposDisponibles}">
-                <option value="${t}" 
+                <option value="<c:out value="${t}"/>" 
                     <c:if test="${t == tipoSeleccionado}">selected</c:if> >
-                    ${t}
+                    <c:out value="${t}"/>
                 </option>
             </c:forEach>
         </select>
@@ -59,24 +59,12 @@
 
         <c:forEach var="r" items="${reservas}">
             <tr>
-                <td>${r.id}</td>
-                <td>
-                    <c:forEach var="h" items="${huespedes}">
-                        <c:if test="${h.id == r.huespedId}">
-                            ${h.nombre} (${h.documento})
-                        </c:if>
-                    </c:forEach>
-                </td>
-                <td>
-                    <c:forEach var="hab" items="${habitaciones}">
-                        <c:if test="${hab.id == r.habitacionId}">
-                            #${hab.numero} - ${hab.tipo}
-                        </c:if>
-                    </c:forEach>
-                </td>
-                <td>${r.fechaIngreso}</td>
-                <td>${r.fechaSalida}</td>
-                <td>$${r.precioTotal}</td>
+                <td><c:out value="${r.id}"/></td>
+                <td><c:out value="${r.huespedNombre}"/> (<c:out value="${r.huespedDocumento}"/>)</td>
+                <td>#<c:out value="${r.habitacionNumero}"/> - <c:out value="${r.habitacionTipo}"/></td>
+                <td><c:out value="${r.fechaIngreso}"/></td>
+                <td><c:out value="${r.fechaSalida}"/></td>
+                <td>$<c:out value="${r.precioTotal}"/></td>
                 <td>
                     <a href="${pageContext.request.contextPath}/pw3/reservas/cancelar/${r.id}">Cancelar</a>
                 </td>

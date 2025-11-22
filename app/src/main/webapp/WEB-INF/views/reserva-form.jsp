@@ -1,5 +1,5 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %> <%@ taglib
-prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <!DOCTYPE html>
 <html>
@@ -10,18 +10,15 @@ prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
     <h1>Nueva Reserva</h1>
 
     <c:if test="${not empty error}">
-      <div style="color: red">${error}</div>
+      <div style="color: red"><c:out value="${error}"/></div>
     </c:if>
 
-    <form
-      method="post"
-      action="${pageContext.request.contextPath}/pw3/reservas/guardar"
-    >
+    <form method="post" action="${pageContext.request.contextPath}/pw3/reservas/guardar">
       Huésped:<br />
       <select name="huespedId" required>
         <option value="">-- Seleccione un huésped --</option>
         <c:forEach var="h" items="${huespedes}">
-          <option value="${h.id}">${h.nombre} - ${h.documento}</option>
+          <option value="<c:out value="${h.id}"/>"><c:out value="${h.nombre}"/> - <c:out value="${h.documento}"/></option>
         </c:forEach>
       </select>
       <br /><br />
@@ -30,8 +27,8 @@ prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
       <select name="habitacionId" required>
         <option value="">-- Seleccione una habitación --</option>
         <c:forEach var="hab" items="${habitaciones}">
-          <option value="${hab.id}">
-            #${hab.numero} - ${hab.tipo} - $${hab.precioPorNoche}/noche
+          <option value="<c:out value="${hab.id}"/>">
+            #<c:out value="${hab.numero}"/> - <c:out value="${hab.tipo}"/> - $<c:out value="${hab.precioPorNoche}"/>/noche
           </option>
         </c:forEach>
       </select>
@@ -49,8 +46,6 @@ prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
     </form>
 
     <br />
-    <a href="${pageContext.request.contextPath}/pw3/reservas/"
-      >Volver al listado</a
-    >
+    <a href="${pageContext.request.contextPath}/pw3/reservas/">Volver al listado</a>
   </body>
 </html>

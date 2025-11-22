@@ -1,5 +1,5 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %> <%@ taglib
-prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <!DOCTYPE html>
 <html>
@@ -9,13 +9,11 @@ prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
   <body>
     <h1>Habitaciones</h1>
 
-    <a href="${pageContext.request.contextPath}/pw3/habitaciones/nueva"
-      >Nueva Habitación</a
-    >
+    <a href="${pageContext.request.contextPath}/pw3/habitaciones/nueva">Nueva Habitación</a>
     <br /><br />
 
     <c:if test="${not empty error}">
-      <div style="color: red">${error}</div>
+      <div style="color: red"><c:out value="${error}"/></div>
     </c:if>
     <br>
     <form method="get" action="${pageContext.request.contextPath}/pw3/habitaciones/">
@@ -23,9 +21,9 @@ prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
         <select name="tipo">
             <option value="">-- Todos los tipos --</option>
             <c:forEach var="t" items="${tiposDisponibles}">
-                <option value="${t}" 
+                <option value="<c:out value="${t}"/>" 
                     <c:if test="${t == tipoSeleccionado}">selected</c:if> >
-                    ${t}
+                    <c:out value="${t}"/>
                 </option>
             </c:forEach>
         </select>
@@ -38,7 +36,6 @@ prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
     <br>
     <table border="1" cellpadding="10">
       <tr>
-        <th>ID</th>
         <th>Número</th>
         <th>Tipo</th>
         <th>Precio</th>
@@ -47,20 +44,13 @@ prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
       <c:forEach var="h" items="${habitaciones}">
         <tr>
-          <td>${h.id}</td>
-          <td>${h.numero}</td>
-          <td>${h.tipo}</td>
-          <td>$${h.precioPorNoche}</td>
+          <td><c:out value="${h.numero}"/></td>
+          <td><c:out value="${h.tipo}"/></td>
+          <td>$<c:out value="${h.precioPorNoche}"/></td>
           <td>
-            <a
-              href="${pageContext.request.contextPath}/pw3/habitaciones/editar/${h.id}"
-              >Editar</a
-            >
+            <a href="${pageContext.request.contextPath}/pw3/habitaciones/editar/${h.id}">Editar</a>
             |
-            <a
-              href="${pageContext.request.contextPath}/pw3/habitaciones/eliminar/${h.id}"
-              >Eliminar</a
-            >
+            <a href="${pageContext.request.contextPath}/pw3/habitaciones/eliminar/${h.id}">Eliminar</a>
           </td>
         </tr>
       </c:forEach>
