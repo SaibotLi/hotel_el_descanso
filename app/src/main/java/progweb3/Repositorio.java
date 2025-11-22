@@ -190,6 +190,141 @@ public class Repositorio {
     }
 
     // ============================================================
+    //                     CRUD HUESPED
+    // ============================================================
+
+    /**
+     * Inserta un huésped en la tabla "huesped".
+     */
+    public void crearHuesped(Huesped h) throws Exception {
+        String sql = "INSERT INTO huesped (nombre, telefono, documento) VALUES (?, ?, ?)";
+        
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            
+            ps.setString(1, h.getNombre());
+            ps.setString(2, h.getTelefono());
+            ps.setString(3, h.getDocumento());
+            
+            ps.executeUpdate();
+        }
+    }
+
+    /**
+     * Devuelve una lista de todos los huéspedes.
+     */
+    public List<Huesped> listarHuespedes() throws Exception {
+        List<Huesped> lista = new ArrayList<>();
+        String sql = "SELECT * FROM huesped ORDER BY nombre";
+        
+        try (Connection conn = dataSource.getConnection();
+             Statement st = conn.createStatement();
+             ResultSet rs = st.executeQuery(sql)) {
+            
+            while (rs.next()) {
+                Huesped h = new Huesped();
+                h.setId(rs.getInt("id"));
+                h.setNombre(rs.getString("nombre"));
+                h.setTelefono(rs.getString("telefono"));
+                h.setDocumento(rs.getString("documento"));
+                lista.add(h);
+            }
+        }
+        return lista;
+    }
+
+    /**
+     * Busca un huésped por ID.
+     */
+    public Huesped buscarHuesped(int id) throws Exception {
+        String sql = "SELECT * FROM huesped WHERE id = ?";
+        
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            
+            ps.setInt(1, id);
+            
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    Huesped h = new Huesped();
+                    h.setId(rs.getInt("id"));
+                    h.setNombre(rs.getString("nombre"));
+                    h.setTelefono(rs.getString("telefono"));
+                    h.setDocumento(rs.getString("documento"));
+                    return h;
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Busca un huésped por documento (para validar documento único).
+     * Retorna el huésped si existe, null si no existe.
+     * Si se pasa un id, excluye ese id de la búsqueda.
+     */
+    public Huesped buscarPorDocumento(String documento, Integer idExcluir) throws Exception {
+        String sql;
+        if (idExcluir != null) {
+            sql = "SELECT * FROM huesped WHERE documento = ? AND id != ?";
+        } else {
+            sql = "SELECT * FROM huesped WHERE documento = ?";
+        }
+        
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            
+            ps.setString(1, documento);
+            if (idExcluir != null) {
+                ps.setInt(2, idExcluir);
+            }
+            
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    Huesped h = new Huesped();
+                    h.setId(rs.getInt("id"));
+                    h.setNombre(rs.getString("nombre"));
+                    h.setTelefono(rs.getString("telefono"));
+                    h.setDocumento(rs.getString("documento"));
+                    return h;
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Actualiza un huésped existente.
+     */
+    public void actualizarHuesped(Huesped h) throws Exception {
+        String sql = "UPDATE huesped SET nombre=?, telefono=?, documento=? WHERE id=?";
+        
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            
+            ps.setString(1, h.getNombre());
+            ps.setString(2, h.getTelefono());
+            ps.setString(3, h.getDocumento());
+            ps.setInt(4, h.getId());
+            
+            ps.executeUpdate();
+        }
+    }
+
+    /**
+     * Elimina un huésped por ID.
+     */
+    public void eliminarHuesped(int id) throws Exception {
+        String sql = "DELETE FROM huesped WHERE id=?";
+        
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            
+            ps.setInt(1, id);
+            ps.executeUpdate();
+        }
+    }
+    // ============================================================
     // AQUI LUEGO IRÁN:
     //    CRUD HUESPED
     //    CRUD RESERVA

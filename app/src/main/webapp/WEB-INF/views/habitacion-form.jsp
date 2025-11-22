@@ -46,7 +46,7 @@
     <br><br>
 
     Precio por noche:<br>
-    <input type="text" name="precio" value="${habitacion.precioPorNoche}">
+    <input type="number" name="precio" value="${habitacion.precioPorNoche}" min="0" required>
     <br><br>
 
     <button type="submit">Guardar</button>
