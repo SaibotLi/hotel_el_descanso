@@ -34,11 +34,12 @@ public class HabitacionController {
     }
 
     // MOSTRAR FORMULARIO NUEVA HABITACION
-    @GET
-    @Path("/nueva")
-    public String nueva() {
-        return "habitacion-form.jsp";
-    }
+@GET
+@Path("/nueva")
+public String nueva() {
+    models.put("habitacion", new Habitacion());  // objeto vacío para Payara no se rompa
+    return "habitacion-form.jsp";
+}
 
     // GUARDAR HABITACION (NUEVA O EDITADA)
     @POST

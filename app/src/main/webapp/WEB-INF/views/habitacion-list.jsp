@@ -9,7 +9,7 @@ prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
   <body>
     <h1>Habitaciones</h1>
 
-    <a href="${pageContext.request.contextPath}/habitaciones/nueva"
+    <a href="${pageContext.request.contextPath}/pw3/habitaciones/nueva"
       >Nueva Habitación</a
     >
     <br /><br />
@@ -35,12 +35,12 @@ prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
           <td>$${h.precioPorNoche}</td>
           <td>
             <a
-              href="${pageContext.request.contextPath}/habitaciones/editar/${h.id}"
+              href="${pageContext.request.contextPath}/pw3/habitaciones/editar/${h.id}"
               >Editar</a
             >
             |
             <a
-              href="${pageContext.request.contextPath}/habitaciones/eliminar/${h.id}"
+              href="${pageContext.request.contextPath}/pw3/habitaciones/eliminar/${h.id}"
               >Eliminar</a
             >
           </td>

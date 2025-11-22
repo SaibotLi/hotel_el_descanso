@@ -23,7 +23,7 @@
     <div style="color:red">${error}</div>
 </c:if>
 
-<form method="post" action="${pageContext.request.contextPath}/habitaciones/guardar">
+<form method="post" action="${pageContext.request.contextPath}/pw3/habitaciones/guardar">
     
     <!-- Campo oculto para saber si es edición -->
     <c:if test="${habitacion != null}">
@@ -46,7 +46,7 @@
 </form>
 
 <br>
-<a href="${pageContext.request.contextPath}/habitaciones/">Volver al listado</a>
+<a href="${pageContext.request.contextPath}/pw3/habitaciones/">Volver al listado</a>
 
 </body>
 </html>
