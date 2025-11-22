@@ -5,8 +5,17 @@ prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
   <head>
     <title>Listado de Huéspedes</title>
+    <link
+      rel="stylesheet"
+      href="${pageContext.request.contextPath}/css/style.css"
+    />
   </head>
-  <body>
+  <body class="container">
+    <a href="${pageContext.request.contextPath}/pw3/" class="btn btn-primary"
+      >🏠 Inicio</a
+    >
+    <br /><br />
+
     <h1>Huéspedes</h1>
 
     <a href="${pageContext.request.contextPath}/pw3/huespedes/nuevo"
@@ -15,7 +24,7 @@ prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
     <br /><br />
 
     <c:if test="${not empty error}">
-      <div style="color: red"><c:out value="${error}" /></div>
+      <div class="error"><c:out value="${error}" /></div>
     </c:if>
     <br />
 
@@ -42,6 +51,7 @@ prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
             |
             <a
               href="${pageContext.request.contextPath}/pw3/huespedes/eliminar/${h.id}"
+              onclick="return confirm('¿Está seguro de que desea eliminar este huésped?');"
               >Eliminar</a
             >
           </td>

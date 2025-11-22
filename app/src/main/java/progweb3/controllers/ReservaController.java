@@ -8,9 +8,9 @@ import jakarta.ws.rs.core.MediaType;
 
 import progweb3.Repositorio;
 import progweb3.models.Reserva;
+import progweb3.util.CsrfTokenUtil; // AGREGAR ESTE IMPORT
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Controller
@@ -80,6 +80,7 @@ public class ReservaController {
             models.put("reserva", new Reserva());
             models.put("habitaciones", repo.listarHabitaciones());
             models.put("huespedes", repo.listarHuespedes());
+            models.put("csrfToken", CsrfTokenUtil.generateToken()); 
         } catch (Exception e) {
             models.put("error", "Error al cargar datos: " + e.getMessage());
             e.printStackTrace();
@@ -92,11 +93,26 @@ public class ReservaController {
     @Path("/guardar")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public String guardar(
+            @FormParam("csrfToken") String csrfToken, // AGREGAR ESTE PARÁMETRO
             @FormParam("habitacionId") Integer habitacionId,
             @FormParam("huespedId") Integer huespedId,
             @FormParam("fechaIngreso") String fechaIngresoStr,
             @FormParam("fechaSalida") String fechaSalidaStr
     ) {
+        // Validar CSRF token
+        if (!CsrfTokenUtil.validateToken(csrfToken)) {
+            models.put("error", "Token de seguridad inválido. Por favor, intente nuevamente.");
+            try {
+                models.put("reserva", new Reserva());
+                models.put("habitaciones", repo.listarHabitaciones());
+                models.put("huespedes", repo.listarHuespedes());
+                models.put("csrfToken", CsrfTokenUtil.generateToken());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+            return "reserva-form.jsp";
+        }
+        
         try {
             // Validar campos requeridos
             if (habitacionId == null || huespedId == null || 
@@ -106,6 +122,7 @@ public class ReservaController {
                 models.put("reserva", new Reserva());
                 models.put("habitaciones", repo.listarHabitaciones());
                 models.put("huespedes", repo.listarHuespedes());
+                models.put("csrfToken", CsrfTokenUtil.generateToken());
                 return "reserva-form.jsp";
             }
 
@@ -120,6 +137,7 @@ public class ReservaController {
                 models.put("reserva", new Reserva());
                 models.put("habitaciones", repo.listarHabitaciones());
                 models.put("huespedes", repo.listarHuespedes());
+                models.put("csrfToken", CsrfTokenUtil.generateToken());
                 return "reserva-form.jsp";
             }
 
@@ -129,6 +147,7 @@ public class ReservaController {
                 models.put("reserva", new Reserva());
                 models.put("habitaciones", repo.listarHabitaciones());
                 models.put("huespedes", repo.listarHuespedes());
+                models.put("csrfToken", CsrfTokenUtil.generateToken());
                 return "reserva-form.jsp";
             }
 
@@ -149,8 +168,9 @@ public class ReservaController {
                 models.put("reserva", new Reserva());
                 models.put("habitaciones", repo.listarHabitaciones());
                 models.put("huespedes", repo.listarHuespedes());
+                models.put("csrfToken", CsrfTokenUtil.generateToken());
             } catch (Exception ex) {
-                e.printStackTrace();
+                ex.printStackTrace();
             }
             return "reserva-form.jsp";
         }

@@ -5,8 +5,16 @@ prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
   <head>
     <title>Huésped</title>
+    <link
+      rel="stylesheet"
+      href="${pageContext.request.contextPath}/css/style.css"
+    />
   </head>
-  <body>
+  <body class="container">
+    <a href="${pageContext.request.contextPath}/pw3/" class="btn btn-primary"
+      >🏠 Inicio</a
+    >
+    <br /><br />
     <h1>
       <c:choose>
         <c:when test="${huesped != null && huesped.id > 0}">
@@ -17,13 +25,18 @@ prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
     </h1>
 
     <c:if test="${not empty error}">
-      <div style="color: red"><c:out value="${error}" /></div>
+      <div class="error"><c:out value="${error}" /></div>
     </c:if>
 
     <form
       method="post"
       action="${pageContext.request.contextPath}/pw3/huespedes/guardar"
     >
+      <!-- Token CSRF -->
+      <input type="hidden" name="csrfToken" value="<c:out
+        value="${csrfToken}"
+      />">
+
       <c:if test="${huesped != null && huesped.id > 0}">
         <input type="hidden" name="id" value="<c:out value="${huesped.id}" />">
       </c:if>

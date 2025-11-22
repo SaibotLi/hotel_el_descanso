@@ -8,6 +8,7 @@ import jakarta.ws.rs.core.MediaType;
 
 import progweb3.Repositorio;
 import progweb3.models.Habitacion;
+import progweb3.util.CsrfTokenUtil;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -53,6 +54,7 @@ public class HabitacionController {
         try {
             models.put("habitacion", new Habitacion());
             models.put("tiposDisponibles", repo.obtenerTiposDisponibles());
+            models.put("csrfToken", CsrfTokenUtil.generateToken());
         } catch (Exception e) {
             models.put("error", "Error al cargar tipos de habitación");
             e.printStackTrace();
@@ -65,11 +67,25 @@ public class HabitacionController {
     @Path("/guardar")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public String guardar(
+            @FormParam("csrfToken") String csrfToken,
             @FormParam("id") Integer id,
             @FormParam("numero") Integer numero,
             @FormParam("tipo") String tipo,
             @FormParam("precio") String precio
     ) {
+        // Validar CSRF token
+        if (!CsrfTokenUtil.validateToken(csrfToken)) {
+            models.put("error", "Token de seguridad inválido. Por favor, intente nuevamente.");
+            try {
+                models.put("habitacion", new Habitacion());
+                models.put("tiposDisponibles", repo.obtenerTiposDisponibles());
+                models.put("csrfToken", CsrfTokenUtil.generateToken());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+            return "habitacion-form.jsp";
+        }
+        
         try {
             Habitacion h = new Habitacion();
             if (id != null && id > 0) h.setId(id);
@@ -91,8 +107,9 @@ public class HabitacionController {
                 // Recargar tipos en caso de error para que el formulario funcione
                 models.put("habitacion", new Habitacion());
                 models.put("tiposDisponibles", repo.obtenerTiposDisponibles());
+                models.put("csrfToken", CsrfTokenUtil.generateToken());
             } catch (Exception ex) {
-                e.printStackTrace();
+                ex.printStackTrace();
             }
             return "habitacion-form.jsp";
         }
@@ -108,6 +125,7 @@ public class HabitacionController {
             Habitacion h = repo.buscarHabitacion(id);
             models.put("habitacion", h);
             models.put("tiposDisponibles", repo.obtenerTiposDisponibles());
+            models.put("csrfToken", CsrfTokenUtil.generateToken());
         } catch (Exception e) {
             models.put("error", "No se pudo cargar la habitación");
             e.printStackTrace();
@@ -122,7 +140,9 @@ public class HabitacionController {
         try {
             repo.eliminarHabitacion(id);
         } catch (Exception e) {
-            models.put("error", "Error al eliminar: " + e.getMessage());
+            // El mensaje de error ya viene del repositorio con información clara
+            models.put("error", e.getMessage());
+            e.printStackTrace();
         }
         return "redirect:/habitaciones/";
     }

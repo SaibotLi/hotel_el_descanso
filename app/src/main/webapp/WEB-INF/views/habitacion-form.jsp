@@ -5,8 +5,9 @@
 <html>
 <head>
     <title>Habitación</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 </head>
-<body>
+<body class="container">
 
 <h1>
     <c:choose>
@@ -19,12 +20,19 @@
     </c:choose>
 </h1>
 
+<a href="${pageContext.request.contextPath}/pw3/" class="btn btn-primary">🏠 Inicio</a>
+<br><br>
+
 <c:if test="${not empty error}">
-    <div style="color:red"><c:out value="${error}"/></div>
+    <div class="error"><c:out value="${error}"/></div>
 </c:if>
 
 <form method="post" action="${pageContext.request.contextPath}/pw3/habitaciones/guardar">
     
+    <!-- Token CSRF -->
+    <input type="hidden" name="csrfToken" value="<c:out value="${csrfToken}"/>">
+    
+    <!-- Campo oculto para saber si es edición -->
     <c:if test="${habitacion != null}">
         <input type="hidden" name="id" value="<c:out value="${habitacion.id}"/>">
     </c:if>

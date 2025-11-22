@@ -179,9 +179,14 @@ public class Repositorio {
 
     /**
      * Elimina una habitación por ID.
+     * Lanza excepción si la habitación tiene reservas asociadas.
      */
     public void eliminarHabitacion(int id) throws Exception {
-
+        // Validar que no tenga reservas
+        if (tieneReservasHabitacion(id)) {
+            throw new Exception("No se puede eliminar la habitación porque tiene reservas asociadas");
+        }
+        
         String sql = "DELETE FROM habitacion WHERE id=?";
 
         try (Connection conn = dataSource.getConnection();
@@ -190,6 +195,48 @@ public class Repositorio {
             ps.setInt(1, id);
             ps.executeUpdate();
         }
+    }
+
+    /**
+     * Verifica si una habitación tiene reservas asociadas.
+     * Retorna true si tiene reservas, false si no tiene.
+     */
+    public boolean tieneReservasHabitacion(int habitacionId) throws Exception {
+        String sql = "SELECT COUNT(*) FROM reserva WHERE habitacion_id = ?";
+        
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            
+            ps.setInt(1, habitacionId);
+            
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Verifica si un huésped tiene reservas asociadas.
+     * Retorna true si tiene reservas, false si no tiene.
+     */
+    public boolean tieneReservasHuesped(int huespedId) throws Exception {
+        String sql = "SELECT COUNT(*) FROM reserva WHERE huesped_id = ?";
+        
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            
+            ps.setInt(1, huespedId);
+            
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        }
+        return false;
     }
 
     // ============================================================
@@ -316,8 +363,14 @@ public class Repositorio {
 
     /**
      * Elimina un huésped por ID.
+     * Lanza excepción si el huésped tiene reservas asociadas.
      */
     public void eliminarHuesped(int id) throws Exception {
+        // Validar que no tenga reservas
+        if (tieneReservasHuesped(id)) {
+            throw new Exception("No se puede eliminar el huésped porque tiene reservas asociadas");
+        }
+        
         String sql = "DELETE FROM huesped WHERE id=?";
         
         try (Connection conn = dataSource.getConnection();

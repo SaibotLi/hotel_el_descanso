@@ -5,15 +5,19 @@
 <html>
   <head>
     <title>Listado de Habitaciones</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
   </head>
   <body>
-    <h1>Habitaciones</h1>
+    <div class="container">
+    <a href="${pageContext.request.contextPath}/pw3/" class="btn btn-primary">🏠 Inicio</a>
+    <br><br>
 
+    <h1>Habitaciones</h1>
     <a href="${pageContext.request.contextPath}/pw3/habitaciones/nueva">Nueva Habitación</a>
     <br /><br />
 
     <c:if test="${not empty error}">
-      <div style="color: red"><c:out value="${error}"/></div>
+      <div class="error"><c:out value="${error}"/></div>
     </c:if>
     <br>
     <form method="get" action="${pageContext.request.contextPath}/pw3/habitaciones/">
@@ -50,10 +54,12 @@
           <td>
             <a href="${pageContext.request.contextPath}/pw3/habitaciones/editar/${h.id}">Editar</a>
             |
-            <a href="${pageContext.request.contextPath}/pw3/habitaciones/eliminar/${h.id}">Eliminar</a>
+            <a href="${pageContext.request.contextPath}/pw3/habitaciones/eliminar/${h.id}" 
+               onclick="return confirm('¿Está seguro de que desea eliminar esta habitación?');">Eliminar</a>
           </td>
         </tr>
       </c:forEach>
     </table>
+    </div>
   </body>
 </html>

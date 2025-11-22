@@ -5,15 +5,16 @@
 <html>
 <head>
     <title>Listado de Reservas</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 </head>
-<body>
+<body class="container">
     <h1>Reservas</h1>
 
-    <a href="${pageContext.request.contextPath}/pw3/reservas/nueva">Nueva Reserva</a>
+    <a href="${pageContext.request.contextPath}/pw3/" class="btn btn-primary">🏠 Inicio</a>
     <br><br>
 
     <c:if test="${not empty error}">
-        <div style="color:red"><c:out value="${error}"/></div>
+        <div class="error"><c:out value="${error}"/></div>
     </c:if>
     <br>
 
@@ -66,7 +67,8 @@
                 <td><c:out value="${r.fechaSalida}"/></td>
                 <td>$<c:out value="${r.precioTotal}"/></td>
                 <td>
-                    <a href="${pageContext.request.contextPath}/pw3/reservas/cancelar/${r.id}">Cancelar</a>
+                    <a href="${pageContext.request.contextPath}/pw3/reservas/cancelar/${r.id}"
+                       onclick="return confirm('¿Está seguro de que desea cancelar esta reserva?');">Cancelar</a>
                 </td>
             </tr>
         </c:forEach>
