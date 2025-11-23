@@ -9,6 +9,9 @@
 </head>
 <body class="container">
 
+<a href="${pageContext.request.contextPath}/pw3/" class="btn btn-primary">🏠 Inicio</a>
+<br><br>
+
 <h1>
     <c:choose>
         <c:when test="${habitacion != null}">
@@ -19,9 +22,6 @@
         </c:otherwise>
     </c:choose>
 </h1>
-
-<a href="${pageContext.request.contextPath}/pw3/" class="btn btn-primary">🏠 Inicio</a>
-<br><br>
 
 <c:if test="${not empty error}">
     <div class="error"><c:out value="${error}"/></div>

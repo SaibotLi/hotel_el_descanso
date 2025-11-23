@@ -8,10 +8,9 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
   </head>
   <body class="container">
-    <h1>Nueva Reserva</h1>
-
     <a href="${pageContext.request.contextPath}/pw3/" class="btn btn-primary">🏠 Inicio</a>
     <br><br>
+    <h1>Nueva Reserva</h1>
 
     <c:if test="${not empty error}">
         <div class="error"><c:out value="${error}"/></div>

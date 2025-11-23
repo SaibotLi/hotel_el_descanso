@@ -71,7 +71,7 @@ public class HuespedController {
     @Path("/guardar")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public String guardar(
-            @FormParam("csrfToken") String csrfToken, // AGREGAR ESTE PARÁMETRO
+            @FormParam("csrfToken") String csrfToken, 
             @FormParam("id") Integer id,
             @FormParam("nombre") String nombre,
             @FormParam("telefono") String telefono,

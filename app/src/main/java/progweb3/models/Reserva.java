@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 /**
- * Modelo Reserva (JavaBean simple).
+ * Modelo Reserva.
  * Representa una fila de la tabla "reserva".
  */
 public class Reserva {

@@ -1,7 +1,7 @@
 package progweb3.models;
 
 /**
- * Modelo Huesped (JavaBean simple).
+ * Modelo Huesped.
  * Representa una fila de la tabla "huesped".
  */
 public class Huesped {

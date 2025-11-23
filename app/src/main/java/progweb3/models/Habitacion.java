@@ -3,7 +3,7 @@ package progweb3.models;
 import java.math.BigDecimal;
 
 /**
- * Modelo Habitacion (JavaBean simple)
+ * Modelo Habitacion.
  * Representa una fila de la tabla "habitacion".
  */
 public class Habitacion {
@@ -17,7 +17,7 @@ public class Habitacion {
     public Habitacion() {
     }
 
-    // Constructor opcional para comodidad
+    // Constructor opcional
     public Habitacion(int numero, String tipo, BigDecimal precioPorNoche) {
         this.numero = numero;
         this.tipo = tipo;

@@ -21,7 +21,6 @@ import progweb3.models.Reserva;
  */
 @ApplicationScoped
 public class Repositorio {
-
     /**
      * Inyectamos el DataSource usando el recurso creado en Payara:
      *   jdbc/hotelDS
@@ -47,12 +46,12 @@ public class Repositorio {
         try (Connection conn = dataSource.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            // Rellenamos los parámetros del INSERT
+            // Relleno los parámetros del INSERT
             ps.setInt(1, h.getNumero());
             ps.setString(2, h.getTipo());
             ps.setBigDecimal(3, h.getPrecioPorNoche());
 
-            // Ejecutamos el INSERT
+            // Ejecuto el INSERT
             ps.executeUpdate();
         }
     }
@@ -611,7 +610,6 @@ public class Repositorio {
 
     /**
      * Obtiene información completa de una reserva con nombres de habitación y huésped.
-     * Útil para mostrar en vistas.
      */
     public ReservaInfoCompleta obtenerReservaCompleta(int id) throws Exception {
         String sql = "SELECT r.*, h.numero as habitacion_numero, h.tipo as habitacion_tipo, " +
@@ -715,11 +713,4 @@ public class Repositorio {
         }
         return lista;
     }
-    // ============================================================
-    // AQUI LUEGO IRÁN:
-    //    CRUD HUESPED
-    //    CRUD RESERVA
-    //    LOGICA DE FECHAS / DISPONIBILIDAD
-    // ============================================================
-
 }
